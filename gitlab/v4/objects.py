@@ -3673,7 +3673,7 @@ class ProjectFileManager(GetMixin, CreateMixin, UpdateMixin, DeleteMixin, RESTMa
             list(blame): a list of commits/lines matching the file
         """
         file_path = file_path.replace("/", "%2F").replace(".", "%2E")
-        path = "%s/%s/blame" % (self.path, file_path)
+        path = "%s/%s/blame_head" % (self.path, file_path)
         query_data = {"ref": ref}
         return self.gitlab.http_head(path, query_data, **kwargs)
 
