@@ -3655,6 +3655,27 @@ class ProjectFileManager(GetMixin, CreateMixin, UpdateMixin, DeleteMixin, RESTMa
         query_data = {"ref": ref}
         return self.gitlab.http_list(path, query_data, **kwargs)
 
+    @cli.register_custom_action("ProjectFileManager", ("file_path", "ref"))
+    @exc.on_http_error(exc.GitlabListError)
+    def blame_head(self, file_path, ref, **kwargs):
+        """Return the content of a file for a commit.
+
+        Args:
+            file_path (str): Path of the file to retrieve
+            ref (str): Name of the branch, tag or commit
+            **kwargs: Extra options to send to the server (e.g. sudo)
+
+        Raises:
+            GitlabAuthenticationError: If authentication is not correct
+            GitlabListError:  If the server failed to perform the request
+
+        Returns:
+            list(blame): a list of commits/lines matching the file
+        """
+        file_path = file_path.replace("/", "%2F").replace(".", "%2E")
+        path = "%s/%s/blame" % (self.path, file_path)
+        query_data = {"ref": ref}
+        return self.gitlab.http_head(path, query_data, **kwargs)
 
 class ProjectPipelineJob(RESTObject):
     pass
