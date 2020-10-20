@@ -632,7 +632,7 @@ class Gitlab(object):
         url = self._build_url(path)
         result = self.http_request('head', url, query_data=query_data,
                                    **kwargs)
-        return result.headers
+        return result
 
     def http_list(self, path, query_data=None, as_list=None, **kwargs):
         """Make a GET request to the Gitlab server for list-oriented queries.
